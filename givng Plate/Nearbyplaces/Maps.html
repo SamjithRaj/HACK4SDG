@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Animated Radius Circle with Nearby Places on Geoapify API</title>
+<style>
+/* Map styling */
+#map {
+height: 90vh;
+width: 100%;
+}
+
+/* Radius Control Styling */
+#radiusControl {
+background-color: rgba(255, 255, 255, 0.9);
+border-radius: 10px;
+padding: 15px;
+box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+position: absolute;
+top: 20px;
+left: 20px;
+z-index: 5;
+font-family: Arial, sans-serif;
+font-size: 14px;
+}
+
+/* Slider styling */
+#radiusSlider {
+width: 100%;
+margin-top: 10px;
+-webkit-appearance: none;
+height: 6px;
+background: #0077CC;
+outline: none;
+opacity: 0.8;
+transition: opacity 0.2s ease;
+border-radius: 5px;
+}
+
+#radiusSlider:hover {
+opacity: 1;
+}
+
+#radiusSlider::-webkit-slider-thumb {
+-webkit-appearance: none;
+appearance: none;
+width: 16px;
+height: 16px;
+border-radius: 50%;
+background: #0077CC;
+cursor: pointer;
+transition: background 0.3s ease;
+}
+
+#radiusSlider::-webkit-slider-thumb:hover {
+background: #004A99;
+}
+
+#radiusSlider::-moz-range-thumb {
+width: 16px;
+height: 16px;
+border-radius: 50%;
+background: #0077CC;
+cursor: pointer;
+transition: background 0.3s ease;
+}
+
+/* Label styling */
+#radiusLabel {
+font-weight: bold;
+color: #333;
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+</style>
+
+<!-- Load Google Maps API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkPlSfnsg8qEbErwVRdnp8mjblY6E0zpU"></script>
+</head>
+<body>
+<!-- Radius Control UI -->
+<div id="radiusControl">
+<div id="radiusLabel">
+<span>Radius:</span>
+<span><span id="radiusValue">5</span> km</span>
+</div>
+<input type="range" id="radiusSlider" min="1" max="20" value="5" step="1">
+</div>
+
+<!-- Map container -->
+<div id="map"></div>
+
+<script>
+let map;
+let userCircle;
+let userMarker;
+let placeMarkers = [];
+
+function initMap() {
+const mapOptions = {
+center: { lat: 20.5937, lng: 78.9629 },
+zoom: 10,
+};
+map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+// Get user's current location
+if (navigator.geolocation) {
+navigator.geolocation.getCurrentPosition((position) => {
+const userLocation = {
+lat: position.coords.latitude,
+lng: position.coords.longitude,
+};
+map.setCenter(userLocation);
+
+// Draw a 5 km radius circle
+userCircle = new google.maps.Circle({
+map: map,
+center: userLocation,
+radius: 5000,
+fillColor: '#AAD1E6',
+strokeColor: '#0077CC',
+strokeWeight: 1,
+fillOpacity: 0.3
+});
+
+// Place a custom marker for the user's location
+userMarker = new google.maps.Marker({
+position: userLocation,
+map: map,
+title: "You are here",
+icon: {
+url: "https://maps.gstatic.com/mapfiles/ms2/micons/man.png",
+scaledSize: new google.maps.Size(32, 32)
+}
+});
+
+// Initial load for nearby places
+fetchNearbyPlaces(userLocation, userCircle.getRadius());
+});
+} else {
+alert("Geolocation is not supported by this browser.");
+}
+
+// Radius slider input handler
+const radiusSlider = document.getElementById("radiusSlider");
+const radiusValue = document.getElementById("radiusValue");
+
+radiusSlider.addEventListener("input", () => {
+const radiusKm = radiusSlider.value;
+radiusValue.innerText = radiusKm;
+
+// Update radius circle and nearby places
+updateRadiusCircle(radiusKm * 1000); // Convert km to meters
+});
+}
+
+function updateRadiusCircle(targetRadius) {
+userCircle.setRadius(targetRadius);
+fetchNearbyPlaces(userMarker.getPosition().toJSON(), targetRadius);
+}
+
+// Function to fetch nearby places using Geoapify API
+function fetchNearbyPlaces(location, radius) {
+// Clear existing markers
+placeMarkers.forEach(marker => marker.setMap(null));
+placeMarkers = [];
+
+const apiKey = "5e096efcdac5443fb33e0d56fb288612";
+const url = `https://api.geoapify.com/v2/places?categories=commercial.food_and_drink&filter=circle:${location.lng},${location.lat},${radius}&limit=10&apiKey=${apiKey}`;
+
+fetch(url)
+.then(response => response.json())
+.then(data => {
+if (data.features && data.features.length > 0) {
+data.features.forEach(place => {
+const placeLocation = {
+lat: place.geometry.coordinates[1],
+lng: place.geometry.coordinates[0]
+};
+
+const marker = new google.maps.Marker({
+position: placeLocation,
+map: map,
+title: place.properties.name || "orphanages",
+icon: "welfareroom.png"
+});
+
+placeMarkers.push(marker);
+});
+} else {
+alert("No places found within the specified radius.");
+}
+})
+.catch(error => console.error("Error fetching places:", error));
+}
+
+// Load the map
+window.onload = initMap;
+</script>
+</body>
+</html>

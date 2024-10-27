@@ -100,7 +100,7 @@
       <div id="requestForm" class="form-section active">
         <div class="form-container">
           <h2>Food Request Form</h2>
-          <form action="food_request.php" method="POST">
+          <form action="food_request.php" method="post">
             <div class="form-group">
               <label for="req-foodItem">Food Item:</label>
               <input type="text" id="req-foodItem" name="foodItem" required />
@@ -168,7 +168,7 @@
               />
             </div>
 
-            <button type="submit">Submit Request</button>
+            <button type="submit" id="req-submit">Submit Request</button>
           </form>
         </div>
       </div>
@@ -177,7 +177,7 @@
       <div id="givingForm" class="form-section">
         <div class="form-container">
           <h2>Food Giving Form</h2>
-          <form action="food_giving.php" method="POST">
+          <form action="food_giving.php" method="post">
             <div class="form-group">
               <label for="give-foodItem">Food Item Name:</label>
               <input type="text" id="give-foodItem" name="foodItem" required />
@@ -244,7 +244,7 @@
               />
             </div>
 
-            <button type="submit">Submit Donation</button>
+            <button type="submit" id="req-submit">Submit Donation</button>
           </form>
         </div>
       </div>
