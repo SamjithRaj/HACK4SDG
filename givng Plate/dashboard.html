@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodBridge Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #ffffff;
+        color: #1a472a;
+        margin: 0;
+        padding: 0;
+      }
+
+      header {
+        background-color: #10573b;
+        padding: 1em 2em;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #ffffff;
+      }
+
+      nav {
+        display: flex;
+        gap: 1.5em;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: #ffffff;
+        font-weight: 600;
+        transition: color 0.3s;
+      }
+
+      nav a:hover {
+        color: #00bfa5;
+      }
+
+      main {
+        padding: 2em;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">The Giving Plate</div>
+      <nav>
+        <a href="#" class="btn">Dashboard</a>
+        <a href="food_log.html" id="foodRequestLink" class="btn">Food Log</a>
+        <button id="logoutBtn" class="btn">Logout</button>
+      </nav>
+    </header>
+
+    <main>
+      <h1 id="welcomeMessage">Welcome to FoodBridge Dashboard</h1>
+      <p>
+        Here you can manage your food sharing and request activities, view
+        statistics, and stay up to date with ongoing donations.
+      </p>
+    </main>
+  </body>
+  <script>
+    document.getElementById("logoutBtn").addEventListener("click", function () {
+      localStorage.removeItem("user");
+      sessionStorage.clear();
+
+      window.location.href = "login_registration.html";
+    });
+  </script>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Food Log</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 20px;
+      }
+
+      .tabs {
+        display: flex;
+        margin-bottom: 20px;
+      }
+
+      .tab {
+        padding: 10px 20px;
+        background-color: #ddd;
+        border: none;
+        cursor: pointer;
+        flex: 1;
+        font-size: 16px;
+      }
+
+      .tab.active {
+        background-color: #10573b;
+        color: white;
+      }
+
+      .form-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-section {
+        display: none;
+      }
+
+      .form-section.active {
+        display: block;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      button[type="submit"] {
+        background-color: #10573b;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+      }
+
+      button[type="submit"]:hover {
+        background-color: #0d4530;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="tabs">
+        <button class="tab active" onclick="showForm('request')">
+          Food Request
+        </button>
+        <button class="tab" onclick="showForm('giving')">Food Giving</button>
+      </div>
+
+      <!-- Food Request Form -->
+      <div id="requestForm" class="form-section active">
+        <div class="form-container">
+          <h2>Food Request Form</h2>
+          <form action="food_request.php" method="POST">
+            <div class="form-group">
+              <label for="req-foodItem">Food Item:</label>
+              <input type="text" id="req-foodItem" name="foodItem" required />
+            </div>
+
+            <div class="form-group">
+              <label for="req-foodType">Food Type:</label>
+              <select id="req-foodType" name="foodType" required>
+                <option value="">Select Food Type</option>
+                <option value="Fresh">Fresh</option>
+                <option value="Frozen">Frozen</option>
+                <option value="Canned">Canned</option>
+                <option value="Packaged">Packaged</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="req-quantity">Quantity:</label>
+              <input
+                type="number"
+                id="req-quantity"
+                name="quantity"
+                min="1"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="req-category">Category:</label>
+              <select id="req-category" name="category" required>
+                <option value="">Select Category</option>
+                <option value="Vegetables">Vegetables</option>
+                <option value="Fruits">Fruits</option>
+                <option value="Grains">Grains</option>
+                <option value="Protein">Protein</option>
+                <option value="Dairy">Dairy</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="req-dietaryType">Dietary Type:</label>
+              <select id="req-dietaryType" name="dietaryType" required>
+                <option value="">Select Dietary Type</option>
+                <option value="Vegetarian">Vegetarian</option>
+                <option value="Vegan">Vegan</option>
+                <option value="Halal">Halal</option>
+                <option value="Kosher">Kosher</option>
+                <option value="None">None</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="req-location">Location:</label>
+              <input type="text" id="req-location" name="location" required />
+            </div>
+
+            <div class="form-group">
+              <label for="req-requiredBy">Required By:</label>
+              <input
+                type="date"
+                id="req-requiredBy"
+                name="requiredBy"
+                required
+              />
+            </div>
+
+            <button type="submit">Submit Request</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Food Giving Form -->
+      <div id="givingForm" class="form-section">
+        <div class="form-container">
+          <h2>Food Giving Form</h2>
+          <form action="food_giving.php" method="POST">
+            <div class="form-group">
+              <label for="give-foodItem">Food Item Name:</label>
+              <input type="text" id="give-foodItem" name="foodItem" required />
+            </div>
+
+            <div class="form-group">
+              <label for="give-category">Category:</label>
+              <select id="give-category" name="category" required>
+                <option value="">Select Category</option>
+                <option value="Vegetables">Vegetables</option>
+                <option value="Fruits">Fruits</option>
+                <option value="Grains">Grains</option>
+                <option value="Protein">Protein</option>
+                <option value="Dairy">Dairy</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="give-type">Food Type:</label>
+              <select id="give-type" name="foodType" required>
+                <option value="">Select Food Type</option>
+                <option value="Fresh">Fresh</option>
+                <option value="Frozen">Frozen</option>
+                <option value="Canned">Canned</option>
+                <option value="Packaged">Packaged</option>
+                <option value="Cooked">Cooked</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="give-quantity">Quantity:</label>
+              <input
+                type="number"
+                id="give-quantity"
+                name="quantity"
+                min="1"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="give-location">Location:</label>
+              <input type="text" id="give-location" name="location" required />
+            </div>
+
+            <div class="form-group">
+              <label for="give-cookingTime">Cooking Time:</label>
+              <input
+                type="datetime-local"
+                id="give-cookingTime"
+                name="cookingTime"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="give-bestBefore">Best Before:</label>
+              <input
+                type="datetime-local"
+                id="give-bestBefore"
+                name="bestBefore"
+                required
+              />
+            </div>
+
+            <button type="submit">Submit Donation</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function showForm(formType) {
+        // Update tabs
+        document.querySelectorAll(".tab").forEach((tab) => {
+          tab.classList.remove("active");
+        });
+        event.currentTarget.classList.add("active");
+
+        // Update forms
+        document.querySelectorAll(".form-section").forEach((form) => {
+          form.classList.remove("active");
+        });
+
+        if (formType === "request") {
+          document.getElementById("requestForm").classList.add("active");
+        } else {
+          document.getElementById("givingForm").classList.add("active");
+        }
+      }
+    </script>
+  </body>
+</html>
